@@ -23,7 +23,6 @@ def load_model():
     model = joblib.load("smote_random_forest.pkl")
     preprocessor = joblib.load("preprocessor.pkl")
     label_encoder = joblib.load("label_encoder.pkl")
-
     return model, preprocessor, label_encoder
 
 
@@ -37,6 +36,7 @@ st.markdown(
     """
     <style>
 
+    /* MAIN BACKGROUND */
     .stApp {
         background-color: #eef5ee;
     }
@@ -47,34 +47,101 @@ st.markdown(
         padding-bottom: 3rem;
     }
 
+    /* HEADINGS */
     h1 {
-        color: #1b5e20;
+        color: #1b5e20 !important;
+        font-weight: 800 !important;
     }
 
     h2, h3 {
-        color: #1b5e20;
+        color: #1b5e20 !important;
     }
 
-    .subtitle {
-        text-align: center;
-        font-size: 18px;
-        margin-bottom: 25px;
+    /* NORMAL TEXT */
+    p {
+        color: #26352a;
     }
 
-    .result {
-        padding: 25px;
-        border-radius: 15px;
-        text-align: center;
+    /* SIDEBAR */
+    section[data-testid="stSidebar"] {
+        background-color: #173b1a;
+    }
+
+    section[data-testid="stSidebar"] * {
+        color: white !important;
+    }
+
+    section[data-testid="stSidebar"] hr {
+        border-color: #5d8060;
+    }
+
+    /* INPUT LABELS */
+    label {
+        color: #26352a !important;
+        font-weight: 600 !important;
+    }
+
+    /* INPUT BOXES */
+    div[data-baseweb="input"] {
         background-color: white;
-        border: 1px solid #cfdccf;
-        margin-top: 20px;
+        border-radius: 10px;
     }
 
+    div[data-baseweb="input"] input {
+        color: #1f2933 !important;
+        background-color: white !important;
+    }
+
+    /* SELECT BOX */
+    div[data-baseweb="select"] {
+        background-color: white;
+        border-radius: 10px;
+    }
+
+    div[data-baseweb="select"] * {
+        color: #1f2933 !important;
+    }
+
+    /* BUTTON */
+    .stButton > button {
+        width: 100%;
+        height: 52px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        background-color: #2e7d32;
+        color: white !important;
+        border: none;
+    }
+
+    .stButton > button:hover {
+        background-color: #1b5e20;
+        color: white !important;
+    }
+
+    /* INFO BOX */
+    .intro-box {
+        background-color: white;
+        padding: 22px;
+        border-radius: 16px;
+        border: 1px solid #cfdccf;
+        margin-bottom: 20px;
+    }
+
+    .intro-title {
+        color: #1b5e20;
+        font-size: 22px;
+        font-weight: 750;
+        margin-bottom: 8px;
+    }
+
+    /* FOOTER */
     .footer {
         text-align: center;
-        margin-top: 40px;
-        padding: 20px;
         color: #536458;
+        font-size: 14px;
+        margin-top: 45px;
+        padding-top: 20px;
         border-top: 1px solid #c8d5c8;
     }
 
@@ -89,11 +156,11 @@ st.markdown(
 
 with st.sidebar:
 
-    st.title("🌱 Smart Irrigation")
+    st.markdown("## 🌱 Smart Irrigation")
 
     st.divider()
 
-    st.subheader("📌 About")
+    st.markdown("### 📌 About")
 
     st.write(
         "This application uses Machine Learning to predict "
@@ -103,13 +170,13 @@ with st.sidebar:
 
     st.divider()
 
-    st.subheader("🤖 Machine Learning")
+    st.markdown("### 🤖 Machine Learning")
 
     st.write("Random Forest + SMOTE")
 
     st.divider()
 
-    st.subheader("💧 Prediction Classes")
+    st.markdown("### 💧 Prediction Classes")
 
     st.write("🟢 Low")
     st.write("🟡 Medium")
@@ -126,16 +193,39 @@ with st.sidebar:
 st.title("🌱 Smart Irrigation AI")
 
 st.markdown(
-    "<div class='subtitle'>"
-    "AI-Based Irrigation Requirement Prediction System"
-    "</div>",
+    """
+    <p style="
+        text-align:center;
+        font-size:19px;
+        color:#455a46;
+        margin-bottom:25px;
+    ">
+    AI-Based Irrigation Requirement Prediction System
+    </p>
+    """,
     unsafe_allow_html=True
 )
 
-st.info(
-    "💡 Enter the current field and crop conditions. "
-    "The machine learning model will predict whether "
-    "the irrigation requirement is Low, Medium, or High."
+# =========================================================
+# INTRODUCTION
+# =========================================================
+
+st.markdown(
+    """
+    <div class="intro-box">
+        <div class="intro-title">
+            💡 Irrigation Decision Support
+        </div>
+
+        <p>
+        Enter the current field and crop conditions below.
+        The machine learning model will predict the expected
+        irrigation requirement as <b>Low</b>, <b>Medium</b>,
+        or <b>High</b>.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
 )
 
 # =========================================================
@@ -210,34 +300,21 @@ with crop_col1:
 
     crop_type = st.selectbox(
         "🌾 Crop Type",
-        [
-            "Wheat",
-            "Rice",
-            "Maize"
-        ]
+        ["Wheat", "Rice", "Maize"]
     )
 
 with crop_col2:
 
     growth_stage = st.selectbox(
         "🌱 Crop Growth Stage",
-        [
-            "Sowing",
-            "Vegetative",
-            "Flowering",
-            "Harvest"
-        ]
+        ["Sowing", "Vegetative", "Flowering", "Harvest"]
     )
 
 with crop_col3:
 
     season = st.selectbox(
         "☀️ Season",
-        [
-            "Kharif",
-            "Rabi",
-            "Zaid"
-        ]
+        ["Kharif", "Rabi", "Zaid"]
     )
 
 # =========================================================
@@ -271,8 +348,6 @@ if reset_button:
 
 if predict_button:
 
-    # Create input DataFrame
-
     input_data = pd.DataFrame({
         "Soil_Moisture": [soil_moisture],
         "Temperature_C": [temperature],
@@ -284,12 +359,10 @@ if predict_button:
         "Previous_Irrigation_mm": [previous_irrigation]
     })
 
-    # Preprocess
-
+    # Preprocessing
     input_encoded = preprocessor.transform(input_data)
 
     # Prediction
-
     prediction = model.predict(input_encoded)
 
     prediction_label = label_encoder.inverse_transform(
@@ -310,7 +383,7 @@ if predict_button:
 
         st.write(
             "The model predicts a high irrigation requirement "
-            "for the given conditions."
+            "for the given field conditions."
         )
 
     elif prediction_label == "Medium":
@@ -321,7 +394,7 @@ if predict_button:
 
         st.write(
             "The model predicts a medium irrigation requirement "
-            "for the given conditions."
+            "for the given field conditions."
         )
 
     else:
@@ -332,7 +405,7 @@ if predict_button:
 
         st.write(
             "The model predicts a low irrigation requirement "
-            "for the given conditions."
+            "for the given field conditions."
         )
 
     # =====================================================
