@@ -1,7 +1,7 @@
+
 import streamlit as st
 import pandas as pd
 import joblib
-
 
 # ============================================================
 # 1. PAGE CONFIGURATION
@@ -13,7 +13,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
 
 # ============================================================
 # 2. CUSTOM CSS
@@ -91,95 +90,125 @@ st.markdown("""
         margin-top: 8px;
     }
 
+    /* FIX: Main page text and widget labels */
+    [data-testid="stMain"] {
+        color: #1f2937 !important;
+    }
+
+    [data-testid="stMain"] [data-testid="stWidgetLabel"],
+    [data-testid="stMain"] [data-testid="stWidgetLabel"] *,
+    [data-testid="stMain"] label,
+    [data-testid="stMain"] .stMarkdown,
+    [data-testid="stMain"] .stMarkdown p,
+    [data-testid="stMain"] .stCaption,
+    [data-testid="stMain"] [data-testid="stCaptionContainer"],
+    [data-testid="stMain"] [data-testid="stCaptionContainer"] * {
+        color: #1f2937 !important;
+    }
+
+    /* Number input fields */
+    [data-testid="stMain"] [data-testid="stNumberInput"] input {
+        color: #ffffff !important;
+        background-color: #262730 !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+
+    /* Number input buttons */
+    [data-testid="stMain"] [data-testid="stNumberInput"] button {
+        color: #ffffff !important;
+    }
+
+    /* Dropdown selected values */
+    [data-testid="stMain"] [data-baseweb="select"] {
+        color: #1f2937 !important;
+    }
+
+    [data-testid="stMain"] [data-baseweb="select"] input {
+        color: #1f2937 !important;
+        -webkit-text-fill-color: #1f2937 !important;
+    }
+
+    /* Dropdown menu and options */
+    [data-testid="stMain"] [role="listbox"],
+    [data-testid="stMain"] [role="option"] {
+        color: #1f2937 !important;
+        background-color: #ffffff !important;
+    }
+
     /* Sidebar */
     section[data-testid="stSidebar"] {
         background-color: #103f1b;
     }
 
     section[data-testid="stSidebar"] * {
-        color: white !important;
+        color: #ffffff !important;
     }
 
-    /* Button */
+    /* Buttons */
     .stButton > button {
         width: 100%;
         border-radius: 10px;
-        height: 50px;
+        min-height: 50px;
         font-size: 18px;
         font-weight: 700;
         background-color: #176b2c;
-        color: white;
+        color: #ffffff !important;
         border: none;
     }
 
     .stButton > button:hover {
         background-color: #0f5120;
-        color: white;
+        color: #ffffff !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-
 # ============================================================
-# 3. LOAD ML COMPONENTS
+# 3. LOAD MACHINE LEARNING COMPONENTS
 # ============================================================
 
 @st.cache_resource
 def load_models():
-
     model = joblib.load("smote_random_forest.pkl")
     preprocessor = joblib.load("preprocessor.pkl")
     label_encoder = joblib.load("label_encoder.pkl")
 
     return model, preprocessor, label_encoder
 
-
 # ============================================================
 # 4. LOAD MODEL WITH ERROR HANDLING
 # ============================================================
 
 try:
-
     model, preprocessor, label_encoder = load_models()
 
-except FileNotFoundError as e:
-
-    st.error(
-        "❌ Required ML model file was not found."
-    )
+except FileNotFoundError:
+    st.error("❌ Required ML model file was not found.")
 
     st.info(
-        "Make sure these files are present in the same folder as app.py:"
+        "Make sure these files are present in the same folder "
+        "as app.py:"
     )
 
-    st.code(
-        """
+    st.code("""
 smote_random_forest.pkl
 preprocessor.pkl
 label_encoder.pkl
-        """
-    )
+""")
 
     st.stop()
 
 except Exception as e:
-
     st.error("❌ Error loading the machine learning model.")
-
     st.exception(e)
-
     st.stop()
-
 
 # ============================================================
 # 5. SIDEBAR
 # ============================================================
 
 with st.sidebar:
-
-    st.markdown(
-        "🌱 **Smart Irrigation**"
-    )
+    st.markdown("🌱 **Smart Irrigation**")
 
     st.divider()
 
@@ -195,17 +224,14 @@ with st.sidebar:
     st.divider()
 
     st.subheader("🤖 Machine Learning")
-
     st.write("Random Forest + SMOTE")
 
     st.divider()
 
     st.subheader("💧 Prediction Classes")
-
     st.write("🟢 Low")
     st.write("🟡 Medium")
     st.write("🔴 High")
-
 
 # ============================================================
 # 6. APPLICATION HEADER
@@ -222,7 +248,6 @@ st.markdown(
     '</div>',
     unsafe_allow_html=True
 )
-
 
 # ============================================================
 # 7. INFORMATION SECTION
@@ -244,21 +269,20 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
 # ============================================================
 # 8. FIELD & ENVIRONMENTAL CONDITIONS
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">📊 Field & Environmental Conditions</div>',
+    '<div class="section-title">'
+    '📊 Field & Environmental Conditions'
+    '</div>',
     unsafe_allow_html=True
 )
 
 col1, col2, col3 = st.columns(3)
 
-
 with col1:
-
     soil_moisture = st.number_input(
         "💧 Soil Moisture (%)",
         min_value=0.0,
@@ -267,9 +291,7 @@ with col1:
         step=0.5
     )
 
-
 with col2:
-
     temperature = st.number_input(
         "🌡️ Temperature (°C)",
         min_value=-10.0,
@@ -278,9 +300,7 @@ with col2:
         step=0.5
     )
 
-
 with col3:
-
     humidity = st.number_input(
         "💨 Humidity (%)",
         min_value=0.0,
@@ -289,12 +309,9 @@ with col3:
         step=0.5
     )
 
-
 col4, col5 = st.columns(2)
 
-
 with col4:
-
     rainfall = st.number_input(
         "🌧️ Rainfall (mm)",
         min_value=0.0,
@@ -302,16 +319,13 @@ with col4:
         step=0.5
     )
 
-
 with col5:
-
     previous_irrigation = st.number_input(
         "🚿 Previous Irrigation (mm)",
         min_value=0.0,
         value=10.0,
         step=0.5
     )
-
 
 # ============================================================
 # 9. CROP INFORMATION
@@ -324,43 +338,23 @@ st.markdown(
 
 crop_col1, crop_col2, crop_col3 = st.columns(3)
 
-
 with crop_col1:
-
     crop_type = st.selectbox(
         "🌾 Crop Type",
-        [
-            "Wheat",
-            "Rice",
-            "Maize"
-        ]
+        ["Wheat", "Rice", "Maize"]
     )
-
 
 with crop_col2:
-
     growth_stage = st.selectbox(
         "🌱 Crop Growth Stage",
-        [
-            "Sowing",
-            "Vegetative",
-            "Flowering",
-            "Harvest"
-        ]
+        ["Sowing", "Vegetative", "Flowering", "Harvest"]
     )
-
 
 with crop_col3:
-
     season = st.selectbox(
         "☀️ Season",
-        [
-            "Kharif",
-            "Rabi",
-            "Zaid"
-        ]
+        ["Kharif", "Rabi", "Zaid"]
     )
-
 
 # ============================================================
 # 10. PREDICTION BUTTON
@@ -372,141 +366,74 @@ predict_button = st.button(
     "🔍 Predict Irrigation Requirement"
 )
 
-
 # ============================================================
 # 11. PREDICTION
 # ============================================================
 
 if predict_button:
-
     try:
-
-        # ----------------------------------------------------
         # Create input DataFrame
-        # ----------------------------------------------------
-
         input_data = pd.DataFrame({
-
-            "Soil_Moisture": [
-                soil_moisture
-            ],
-
-            "Temperature_C": [
-                temperature
-            ],
-
-            "Humidity": [
-                humidity
-            ],
-
-            "Rainfall_mm": [
-                rainfall
-            ],
-
-            "Crop_Type": [
-                crop_type
-            ],
-
-            "Crop_Growth_Stage": [
-                growth_stage
-            ],
-
-            "Season": [
-                season
-            ],
-
-            "Previous_Irrigation_mm": [
-                previous_irrigation
-            ]
-
+            "Soil_Moisture": [soil_moisture],
+            "Temperature_C": [temperature],
+            "Humidity": [humidity],
+            "Rainfall_mm": [rainfall],
+            "Crop_Type": [crop_type],
+            "Crop_Growth_Stage": [growth_stage],
+            "Season": [season],
+            "Previous_Irrigation_mm": [previous_irrigation]
         })
 
-
-        # ----------------------------------------------------
         # Preprocess input
-        # ----------------------------------------------------
+        input_encoded = preprocessor.transform(input_data)
 
-        input_encoded = preprocessor.transform(
-            input_data
-        )
+        # Machine learning prediction
+        prediction = model.predict(input_encoded)
 
-
-        # ----------------------------------------------------
-        # Machine Learning prediction
-        # ----------------------------------------------------
-
-        prediction = model.predict(
-            input_encoded
-        )
-
-
-        # ----------------------------------------------------
         # Convert encoded prediction to label
-        # ----------------------------------------------------
-
         prediction_label = label_encoder.inverse_transform(
             prediction
         )[0]
 
-
-        # ----------------------------------------------------
-        # Display prediction
-        # ----------------------------------------------------
-
+        # Display prediction heading
         st.markdown(
-            '<div class="section-title">🎯 Prediction Result</div>',
+            '<div class="section-title">'
+            '🎯 Prediction Result'
+            '</div>',
             unsafe_allow_html=True
         )
 
-
         if prediction_label == "High":
-
-            st.error(
-                "🔴 HIGH Irrigation Requirement"
-            )
+            st.error("🔴 HIGH Irrigation Requirement")
 
             st.write(
                 "The model predicts that the crop may "
                 "require a high amount of irrigation."
             )
 
-
         elif prediction_label == "Medium":
-
-            st.warning(
-                "🟡 MEDIUM Irrigation Requirement"
-            )
+            st.warning("🟡 MEDIUM Irrigation Requirement")
 
             st.write(
                 "The model predicts that the crop may "
                 "require a moderate amount of irrigation."
             )
 
-
         elif prediction_label == "Low":
-
-            st.success(
-                "🟢 LOW Irrigation Requirement"
-            )
+            st.success("🟢 LOW Irrigation Requirement")
 
             st.write(
                 "The model predicts that the crop may "
                 "require a low amount of irrigation."
             )
 
-
         else:
-
             st.info(
                 f"💧 Predicted Irrigation Requirement: "
                 f"{prediction_label}"
             )
 
-
-        # ----------------------------------------------------
         # Show entered values
-        # ----------------------------------------------------
-
         st.subheader("📋 Input Summary")
 
         display_data = pd.DataFrame({
@@ -520,7 +447,6 @@ if predict_button:
                 "Growth Stage",
                 "Season"
             ],
-
             "Value": [
                 f"{soil_moisture:.1f} %",
                 f"{temperature:.1f} °C",
@@ -535,12 +461,8 @@ if predict_button:
 
         st.table(display_data)
 
-
     except Exception as e:
-
-        st.error(
-            "❌ Prediction could not be completed."
-        )
+        st.error("❌ Prediction could not be completed.")
 
         st.write(
             "Please check that the input column names and "
@@ -549,7 +471,6 @@ if predict_button:
         )
 
         st.exception(e)
-
 
 # ============================================================
 # 12. FOOTER
